@@ -9,9 +9,28 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+
+  // Email validation regex
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    // Required field validation
+    if (!form.email || !form.password) {
+      setError("Both email and password are required");
+      return;
+    }
+
+    // Email format validation
+    if (!validateEmail(form.email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
 
     try {
       const res = await fetch("/api/login", {
@@ -26,11 +45,11 @@ export default function Login() {
         localStorage.setItem("token", data.token);
         window.location.reload();
       } else {
-        alert(data.message || "Login failed");
+        setError("Email or password is incorrect");
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Something went wrong");
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -42,6 +61,7 @@ export default function Login() {
       >
         <h2 className="text-2xl font-bold text-center">Login</h2>
 
+        {/* Email Input */}
         <input
           type="email"
           placeholder="Email"
@@ -50,10 +70,10 @@ export default function Login() {
           className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        {/* Password wrapper relative for absolute icon */}
+        {/* Password Input */}
         <div className="relative">
           <input
-            type={showPassword ? "text" : "password"} // toggle here
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -66,6 +86,11 @@ export default function Login() {
             {showPassword ? <FaEyeSlash /> : <FaEye />}
           </span>
         </div>
+
+        {/* Error Message */}
+        {error && (
+          <p className="text-red-500 text-sm text-center">{error}</p>
+        )}
 
         <button
           type="submit"
