@@ -93,7 +93,7 @@ export default function Register() {
 
   if (res.ok) {
     setTimeout(() => {
-      router.push("/login");
+      router.push("/");
     }, 2000);
   }
 };
@@ -217,7 +217,7 @@ export default function Register() {
 
         <p className="text-center text-gray-600">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-500 hover:underline">
+          <Link href="/" className="text-blue-500 hover:underline">
             Login here
           </Link>
         </p>
