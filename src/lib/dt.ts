@@ -1,8 +1,8 @@
 import mysql from "mysql2/promise";
 
 export const db = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "@Maddy02",
-  database: "nextadmin",
+  uri: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: true
+  }
 });
