@@ -79,12 +79,14 @@ export default function Login() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-          <span
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </span>
+          {form.password && (
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+)}
         </div>
 
         {/* Error Message */}

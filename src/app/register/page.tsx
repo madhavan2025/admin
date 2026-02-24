@@ -168,12 +168,14 @@ export default function Register() {
     {errors.password}
   </p>
 )}
-          <span
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </span>
+          {form.password && (
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+  >
+    {showPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+)}
         </div>
 
        
@@ -189,14 +191,16 @@ export default function Register() {
             }
             className="w-full p-3 border rounded-md pr-10"
           />
-          <span
-            onClick={() =>
-              setShowConfirmPassword(!showConfirmPassword)
-            }
-            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-          >
-            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-          </span>
+         {form.confirmPassword && (
+  <span
+    onClick={() =>
+      setShowConfirmPassword(!showConfirmPassword)
+    }
+    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+  >
+    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+  </span>
+)}
           {errors.confirmPassword && (
             <p className="text-red-500 text-sm mt-1">
               {errors.confirmPassword}
