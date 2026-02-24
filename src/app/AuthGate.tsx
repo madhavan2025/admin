@@ -26,7 +26,7 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  if (isLoggedIn === null) return <div>Loading...</div>;
+ 
 
   // Allow public routes even if not logged in
   if (!isLoggedIn && !publicRoutes.includes(pathname)) return <Login />;
