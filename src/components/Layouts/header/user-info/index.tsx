@@ -19,21 +19,27 @@ export function UserInfo() {
   const router = useRouter();
    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+ useEffect(() => {
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+
+      // 👇 fetch avatar from DB
+      if (parsedUser.id) {
+        fetchAvatar(parsedUser.id);
       }
-    } catch (error) {
-      console.error("Invalid user in localStorage");
-      localStorage.removeItem("user");
     }
-  }, []);
+  } catch (error) {
+    console.error("Invalid user in localStorage");
+    localStorage.removeItem("user");
+  }
+}, []);
 
   const fetchAvatar = async (userId: string) => {
     try {
-      const res = await fetch(`/api/upload-avatar?userId=${userId}`);
+      const res = await fetch(`/api/get-avatar?userId=${userId}`);
       if (!res.ok) throw new Error("Avatar not found");
       const data = await res.json();
       setAvatarUrl(data.avatar_url || null);
@@ -95,19 +101,19 @@ export function UserInfo() {
         <h2 className="sr-only">User information</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
-          {user?.img ? (
-            <Image
-              src={user.img}
-              className="size-12 rounded-full object-cover"
-              alt={`Avatar for ${user?.name}`}
-              width={48}
-              height={48}
-            />
-          ) : (
-            <div className="flex items-center justify-center size-12 rounded-full bg-primary text-white font-semibold">
-              {firstLetter}
-            </div>
-          )}
+         {avatarUrl ? (
+  <Image
+    src={avatarUrl}
+    className="size-12 rounded-full object-cover"
+    alt={`Avatar for ${user?.name}`}
+    width={48}
+    height={48}
+  />
+) : (
+  <div className="flex items-center justify-center size-12 rounded-full bg-gray-200 font-semibold">
+    {firstLetter}
+  </div>
+)}
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">
