@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
-
+import Image from "next/image";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
@@ -155,19 +155,33 @@ export default function Login() {
           </p>
         </div>
 
-        {/* RIGHT SIDE - WELCOME PANEL */}
-        <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white items-center justify-center p-12">
-          <div>
-            <h3 className="text-lg mb-2">NextAdmin</h3>
-            <h1 className="text-4xl font-bold mb-4">
-              Welcome Back!
-            </h1>
-            <p className="text-indigo-100">
-              Please sign in to your account by completing
-              the necessary fields.
-            </p>
-          </div>
-        </div>
+       {/* RIGHT SIDE - WELCOME PANEL */}
+<div className="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-500 to-purple-600 text-white items-center justify-center p-12">
+  <div className="text-center max-w-md">
+    <h3 className="text-lg mb-2">NextAdmin</h3>
+
+    <h1 className="text-4xl font-bold mb-4">
+      Welcome Back!
+    </h1>
+
+    <p className="text-indigo-100 mb-6">
+      Please sign in to your account by completing
+      the necessary fields.
+    </p>
+
+    {/* 🔹 Added Image Below Text */}
+    <div className="flex justify-center">
+      <Image
+        src="/images/login.jpg"   // 👈 change image name if needed
+        alt="Login Illustration"
+        width={350}
+        height={350}
+        className="rounded-lg"
+        priority
+      />
+    </div>
+  </div>
+</div>
       </div>
     </div>
   );

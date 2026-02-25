@@ -2,7 +2,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash,FaGoogle } from "react-icons/fa";
+import Image from "next/image";
+
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 export default function Register() {
   const router = useRouter();
@@ -42,7 +50,7 @@ export default function Register() {
   setSubmitted(true); // 👈 ADD THIS
   setMessage("");
 
-  let newErrors: any = {};
+   let newErrors: Partial<FormData> = {};
 
   if (!validateName(form.name)) {
     newErrors.name = "Name must contain letters only";
@@ -98,17 +106,31 @@ export default function Register() {
   }
 };
 
-  const passwordRules = validatePassword(form.password);
+
 
 return (
   <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-    <div className="bg-white rounded-2xl shadow-xl flex w-full max-w-5xl overflow-hidden">
+    <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl flex overflow-hidden">
       
       {/* LEFT SIDE - REGISTER FORM */}
       <div className="w-full lg:w-1/2 p-10">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Sign Up
         </h2>
+          <button
+            type="button"
+            className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 mb-6 hover:bg-gray-50 transition"
+          >
+            <FaGoogle className="text-red-500" />
+            Sign Up with Google
+          </button>
+           <div className="flex items-center gap-3 mb-6">
+            <div className="flex-1 h-px bg-gray-300"></div>
+            <span className="text-sm text-gray-500">
+              Or sign up with email
+            </span>
+            <div className="flex-1 h-px bg-gray-300"></div>
+          </div>
 
         {message && (
           <div
@@ -126,6 +148,9 @@ return (
           
           {/* Name */}
           <div>
+            <label htmlFor="name" className="block text-sm font-medium mb-1">
+                Full Name
+              </label>
             <input
               type="text"
               placeholder="Full Name"
@@ -144,6 +169,9 @@ return (
 
           {/* Email */}
           <div>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">
+                Email Address
+              </label>
             <input
               type="email"
               placeholder="Email"
@@ -162,6 +190,9 @@ return (
 
           {/* Password */}
           <div className="relative">
+            <label htmlFor="password" className="block text-sm font-medium mb-1">
+                Password
+              </label>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
@@ -188,6 +219,9 @@ return (
 
           {/* Confirm Password */}
           <div className="relative">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
+                Confirm Password
+              </label>
             <input
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm Password"
@@ -240,18 +274,31 @@ return (
         </p>
       </div>
 
-      {/* RIGHT SIDE - GRADIENT SECTION */}
-      <div className="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-700 items-center justify-center text-white p-12">
-        <div className="text-center max-w-md">
-          <h1 className="text-4xl font-bold mb-6">
-            Welcome!
-          </h1>
-          <p className="text-lg opacity-90">
-            Join our platform and start managing your dashboard
-            with powerful tools and a clean UI experience.
-          </p>
-        </div>
-      </div>
+     {/* RIGHT SIDE - GRADIENT SECTION */}
+<div className="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-700 items-center justify-center text-white p-12">
+  <div className="text-center max-w-md">
+    <h1 className="text-4xl font-bold mb-6">
+      Welcome!
+    </h1>
+
+    <p className="text-lg opacity-90 mb-6">
+      Join our platform and start managing your dashboard
+      with powerful tools and a clean UI experience.
+    </p>
+
+    {/* 🔹 Added Image Below Text */}
+    <div className="flex justify-center">
+      <Image
+        src="/images/register.jpg"
+        alt="Register Illustration"
+        width={350}
+        height={350}
+        className="rounded-lg"
+        priority
+      />
+    </div>
+  </div>
+</div>
 
     </div>
   </div>
