@@ -42,7 +42,7 @@ export function UserInfo() {
       const res = await fetch(`/api/get-avatar?userId=${userId}`);
       if (!res.ok) throw new Error("Avatar not found");
       const data = await res.json();
-      setAvatarUrl(data.avatar_url || null);
+      setAvatarUrl(data.avatarUrl || null);
     } catch (error) {
       console.warn("Avatar fetch failed, using default icon");
       setAvatarUrl(null); // fallback to Google-like icon
