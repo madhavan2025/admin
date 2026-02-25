@@ -20,6 +20,23 @@ export function UploadPhotoForm() {
     }
   }, []);
 
+  useEffect(() => {
+  const user = localStorage.getItem("user");
+  if (!user) return;
+
+  const parsed = JSON.parse(user);
+  setUserId(parsed.id);
+  setUsername(parsed.name);
+
+  // 👇 Fetch avatar from DB
+  fetch(`/api/get-avatar?userId=${parsed.id}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.avatarUrl) {
+        setAvatarUrl(data.avatarUrl);
+      }
+    });
+}, []);
   // ✅ UPLOAD / EDIT IMAGE
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -61,6 +78,7 @@ export function UploadPhotoForm() {
       alert("Delete failed");
     }
   };
+
 
   return (
     <ShowcaseSection title={avatarUrl ? "Your Photo" : "Upload your photo"} className="!p-7">
