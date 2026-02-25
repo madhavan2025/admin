@@ -9,17 +9,48 @@ import {
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LogOutIcon, SettingsIcon, UserIcon } from "./icons";
+import { useRouter } from "next/navigation";
 
 export function UserInfo() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
-  const USER = {
-    name: "Test User",
-    email: "test@admin.com",
-    img: "/images/user/user-03.png",
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Invalid user in localStorage");
+      localStorage.removeItem("user");
+    }
+  }, []);
+
+  const fetchAvatar = async (userId: string) => {
+    try {
+      const res = await fetch(`/api/upload-avatar?userId=${userId}`);
+      if (!res.ok) throw new Error("Avatar not found");
+      const data = await res.json();
+      setAvatarUrl(data.avatar_url || null);
+    } catch (error) {
+      console.warn("Avatar fetch failed, using default icon");
+      setAvatarUrl(null); // fallback to Google-like icon
+    }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsOpen(false);
+    router.push("/login"); // better than reload
+  };
+
+  const firstLetter = user?.name?.charAt(0)?.toUpperCase() || "?";
 
   return (
     <Dropdown isOpen={isOpen} setIsOpen={setIsOpen}>
@@ -27,22 +58,29 @@ export function UserInfo() {
         <span className="sr-only">My Account</span>
 
         <figure className="flex items-center gap-3">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar of ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          {/* Avatar Circle */}
+           {avatarUrl ? (
+            <Image
+              src={avatarUrl}
+              className="size-12 rounded-full object-cover"
+              alt={`Avatar for ${user?.name}`}
+              width={48}
+              height={48}
+            />
+          ) : (
+            <div className="flex items-center justify-center size-12 rounded-full bg-gray-200  font-semibold text-lg">
+              {firstLetter}
+            </div>
+          )}
+
           <figcaption className="flex items-center gap-1 font-medium text-dark dark:text-dark-6 max-[1024px]:sr-only">
-            <span>{USER.name}</span>
+            <span>{user?.name || "Guest"}</span>
 
             <ChevronUpIcon
               aria-hidden
               className={cn(
                 "rotate-180 transition-transform",
-                isOpen && "rotate-0",
+                isOpen && "rotate-0"
               )}
               strokeWidth={1.5}
             />
@@ -57,45 +95,50 @@ export function UserInfo() {
         <h2 className="sr-only">User information</h2>
 
         <figure className="flex items-center gap-2.5 px-5 py-3.5">
-          <Image
-            src={USER.img}
-            className="size-12"
-            alt={`Avatar for ${USER.name}`}
-            role="presentation"
-            width={200}
-            height={200}
-          />
+          {user?.img ? (
+            <Image
+              src={user.img}
+              className="size-12 rounded-full object-cover"
+              alt={`Avatar for ${user?.name}`}
+              width={48}
+              height={48}
+            />
+          ) : (
+            <div className="flex items-center justify-center size-12 rounded-full bg-primary text-white font-semibold">
+              {firstLetter}
+            </div>
+          )}
 
           <figcaption className="space-y-1 text-base font-medium">
             <div className="mb-2 leading-none text-dark dark:text-white">
-              {USER.name}
+              {user?.name || "Guest"}
             </div>
 
-            <div className="leading-none text-gray-6">{USER.email}</div>
+            <div className="leading-none text-gray-6">
+              {user?.email || "No email"}
+            </div>
           </figcaption>
         </figure>
 
         <hr className="border-[#E8E8E8] dark:border-dark-3" />
 
-        <div className="p-2 text-base text-[#4B5563] dark:text-dark-6 [&>*]:cursor-pointer">
+        <div className="p-2 text-base text-[#4B5563] dark:text-dark-6">
           <Link
-            href={"/profile"}
+            href="/profile"
             onClick={() => setIsOpen(false)}
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
           >
             <UserIcon />
-
-            <span className="mr-auto text-base font-medium">View profile</span>
+            <span className="mr-auto font-medium">View profile</span>
           </Link>
 
           <Link
-            href={"/pages/settings"}
+            href="/pages/settings"
             onClick={() => setIsOpen(false)}
             className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
           >
             <SettingsIcon />
-
-            <span className="mr-auto text-base font-medium">
+            <span className="mr-auto font-medium">
               Account Settings
             </span>
           </Link>
@@ -105,21 +148,12 @@ export function UserInfo() {
 
         <div className="p-2 text-base text-[#4B5563] dark:text-dark-6">
           <button
-  className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
-  onClick={() => {
-    // Remove the token from sessionStorage
-    localStorage.removeItem("token"); // replace "authToken" with your token key
-
-    // Close the dropdown
-    setIsOpen(false);
-
-    // Optionally, redirect to login page
-    window.location.reload(); // adjust path if needed
-  }}
->
-  <LogOutIcon />
-  <span className="text-base font-medium">Log out</span>
-</button>
+            className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-[9px] hover:bg-gray-2 hover:text-dark dark:hover:bg-dark-3 dark:hover:text-white"
+            onClick={handleLogout}
+          >
+            <LogOutIcon />
+            <span className="font-medium">Log out</span>
+          </button>
         </div>
       </DropdownContent>
     </Dropdown>

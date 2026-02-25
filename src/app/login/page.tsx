@@ -36,6 +36,7 @@ export default function Login() {
 
       if (res.ok && data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         window.location.reload();
       } else {
         setError("Email or password is incorrect");

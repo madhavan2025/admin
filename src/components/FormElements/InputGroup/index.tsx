@@ -10,7 +10,7 @@ type InputGroupProps = {
   required?: boolean;
   disabled?: boolean;
   active?: boolean;
-  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // standardized to onChange
   value?: string;
   name?: string;
   icon?: React.ReactNode;
@@ -27,7 +27,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
   required,
   disabled,
   active,
-  handleChange,
+  onChange,
   icon,
   ...props
 }) => {
@@ -48,7 +48,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
           "relative mt-3 [&_svg]:absolute [&_svg]:top-1/2 [&_svg]:-translate-y-1/2",
           props.iconPosition === "left"
             ? "[&_svg]:left-4.5"
-            : "[&_svg]:right-4.5",
+            : "[&_svg]:right-4.5"
         )}
       >
         <input
@@ -56,7 +56,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
           type={type}
           name={props.name}
           placeholder={placeholder}
-          onChange={handleChange}
+          onChange={onChange} // use the standardized prop
           value={props.value}
           defaultValue={props.defaultValue}
           className={cn(
@@ -65,7 +65,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
               ? getFileStyles(props.fileStyleVariant!)
               : "px-5.5 py-3 text-dark placeholder:text-dark-6 dark:text-white",
             props.iconPosition === "left" && "pl-12.5",
-            props.height === "sm" && "py-2.5",
+            props.height === "sm" && "py-2.5"
           )}
           required={required}
           disabled={disabled}
