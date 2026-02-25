@@ -81,17 +81,20 @@ export default function FormElementsPage() {
         <div className="flex flex-col gap-9">
           <ShowcaseSection title="Textarea Fields" className="space-y-6 !p-6.5">
             <TextAreaGroup
+            name="defaultTextarea"
               label="Default textarea"
               placeholder="Default textarea"
             />
 
             <TextAreaGroup
+            name="defaultTextarea"
               label="Active textarea"
               placeholder="Active textarea"
               active
             />
 
             <TextAreaGroup
+            name="defaultTextarea"
               label="Disabled textarea"
               placeholder="Disabled textarea"
               disabled
