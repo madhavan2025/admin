@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { writeFile, unlink } from "fs/promises";
-import path from "path";
+import { put, del } from "@vercel/blob";
 import { db } from "@/lib/dt";
 
-const BASE_URL = "https://admin-weld-beta-21.vercel.app"; // Your site URL
-
-// Upload avatar
+// ===============================
+// UPLOAD AVATAR (Vercel Blob)
+// ===============================
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
@@ -16,49 +15,44 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing data" }, { status: 400 });
     }
 
-    // Get old avatar
+    // Get old avatar from DB
     const [rows]: any = await db.execute(
       `SELECT avatar_url FROM user_profiles WHERE user_id = ?`,
       [userId]
     );
+
     const oldAvatar = rows?.[0]?.avatar_url;
 
-    // Delete old file if exists
+    // Delete old image from Vercel Blob if exists
     if (oldAvatar) {
-      const oldFileName = oldAvatar.split("/images/")[1];
-      const oldPath = path.join(process.cwd(), "public/images", oldFileName);
       try {
-        await unlink(oldPath);
+        await del(oldAvatar);
       } catch (err) {
-        console.warn("Old avatar not found:", err);
+        console.warn("Old avatar delete failed:", err);
       }
     }
 
-    // Save new file
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    // Upload new image to Vercel Blob
+    const blob = await put(`avatars/${Date.now()}-${file.name}`, file, {
+      access: "public",
+    });
 
-    const fileName = `${Date.now()}-${file.name}`;
-    const filePath = path.join(process.cwd(), "public/images", fileName);
-
-    await writeFile(filePath, buffer);
-
-    // Full public URL to store in DB
-    const imageUrl = `${BASE_URL}/images/${fileName}`;
-
+    // Save blob URL to database
     await db.execute(
       `UPDATE user_profiles SET avatar_url = ? WHERE user_id = ?`,
-      [imageUrl, userId]
+      [blob.url, userId]
     );
 
-    return NextResponse.json({ imageUrl });
+    return NextResponse.json({ imageUrl: blob.url });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }
 
-// Delete avatar
+// ===============================
+// DELETE AVATAR
+// ===============================
 export async function DELETE(req: Request) {
   try {
     const { userId, avatarUrl } = await req.json();
@@ -67,15 +61,14 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Missing data" }, { status: 400 });
     }
 
-    const fileName = avatarUrl.split("/images/")[1];
-    const filePath = path.join(process.cwd(), "public/images", fileName);
-
+    // Delete from Vercel Blob
     try {
-      await unlink(filePath);
+      await del(avatarUrl);
     } catch (err) {
-      console.warn("File not found or already deleted:", err);
+      console.warn("Blob delete failed:", err);
     }
 
+    // Remove from DB
     await db.execute(
       `UPDATE user_profiles SET avatar_url = NULL WHERE user_id = ?`,
       [userId]
