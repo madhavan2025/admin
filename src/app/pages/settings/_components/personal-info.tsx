@@ -25,43 +25,42 @@ export function PersonalInfoForm() {
   const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
-    // Get user info from localStorage
-    const user = localStorage.getItem("user");
-    if (user) {
-      const parsedUser = JSON.parse(user);
+  const user = localStorage.getItem("user");
+  if (user) {
+    const parsedUser = JSON.parse(user);
+    setForm(prev => ({
+      ...prev,
+      fullName: parsedUser.name || "",
+      email: parsedUser.email || "",
+    }));
+    setUserId(parsedUser.id || "");
+  }
+}, []);
+
+useEffect(() => {
+  const fetchProfile = async () => {
+    if (!userId) return;
+
+    const res = await fetch(`/api/profile?userId=${userId}`);
+    const data = await res.json();
+
+    if (res.ok) {
       setForm(prev => ({
         ...prev,
-        fullName: parsedUser.name || "",
-        email: parsedUser.email || "",
+        phoneNumber: data.phoneNumber || "",
+        username: data.username || "",
+        bio: data.bio || "",
       }));
-      setUserId(parsedUser.id || ""); // assuming your token/user has `id`
     }
-
-    // Fetch editable profile info from API
-    const fetchProfile = async () => {
-      if (!userId) return;
-
-      const res = await fetch(`/api/profile?userId=${userId}`);
-      const data = await res.json();
-
-      if (res.ok) {
-        setForm(prev => ({
-          ...prev,
-          phoneNumber: data.phoneNumber || "",
-          username: data.username || "",
-          bio: data.bio || "",
-        }));
-      }
-    };
-
-    fetchProfile();
-  }, [userId]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+  fetchProfile();
+}, [userId]);
+
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const { name, value } = e.target;
+  setForm(prev => ({ ...prev, [name as keyof FormState]: value }));
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
