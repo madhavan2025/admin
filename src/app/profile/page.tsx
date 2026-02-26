@@ -3,40 +3,63 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { CameraIcon } from "./_components/icons";
 import { SocialAccounts } from "./_components/social-accounts";
 
 export default function Page() {
   const [data, setData] = useState({
-    name: "Danish Heilium",
-    profilePhoto: "/images/user/user-03.png",
-    coverPhoto: "/images/cover/cover-01.png",
+    name: "",
+    profilePhoto: "",
+    coverPhoto: "/images/cover/cover-02.jpg",
   });
+const [userId, setUserId] = useState<string | null>(null);
 
-  const handleChange = (e: any) => {
-    if (e.target.name === "profilePhoto" ) {
-      const file = e.target?.files[0];
+useEffect(() => {
+  const user = localStorage.getItem("user");
+  if (!user) return;
 
-      setData({
-        ...data,
-        profilePhoto: file && URL.createObjectURL(file),
-      });
-    } else if (e.target.name === "coverPhoto") {
-      const file = e.target?.files[0];
+  const parsed = JSON.parse(user);
 
-      setData({
-        ...data,
-        coverPhoto: file && URL.createObjectURL(file),
-      });
-    } else {
-      setData({
-        ...data,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
+  setUserId(parsed.id);
 
+  // ✅ Set name from login
+  setData((prev) => ({
+    ...prev,
+    name: parsed.name,
+  }));
+
+  // ✅ Fetch avatar from DB
+  fetch(`/api/get-avatar?userId=${parsed.id}`)
+    .then((res) => res.json())
+    .then((resData) => {
+      if (resData.avatarUrl) {
+        setData((prev) => ({
+          ...prev,
+          profilePhoto: resData.avatarUrl,
+        }));
+      }
+    })
+    .catch((err) => console.error("Avatar fetch error:", err));
+}, []);
+
+ const handleChange = (e: any) => {
+  const { name, files, value } = e.target;
+
+  if (files && files[0]) {
+    const imageUrl = URL.createObjectURL(files[0]);
+
+    setData((prev) => ({
+      ...prev,
+      [name]: imageUrl,
+    }));
+  } else {
+    setData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+};
   return (
     <div className="mx-auto w-full max-w-[970px]">
       <Breadcrumb pageName="Profile" />
