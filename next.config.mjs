@@ -21,8 +21,15 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com", // ✅ THIS is required
-      }
+      },
     ],
+  },
+  experimental: {
+    turbopack: true,
+  },
+  env: {
+    MONGODB_URI: process.env.MONGODB_URI,
+    JWT_SECRET: process.env.JWT_SECRET,
   },
 };
 

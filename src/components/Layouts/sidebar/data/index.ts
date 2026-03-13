@@ -56,8 +56,8 @@ export const NAV_DATA = [
         icon: Icons.Alphabet,
         items: [
           {
-            title: "Settings",
-            url: "/pages/settings",
+            title: "Agent Settings",
+            url: "/agent-settings", 
           },
         ],
       },
@@ -100,6 +100,7 @@ export const NAV_DATA = [
           },
         ],
       },
+     
     ],
   },
 ];
