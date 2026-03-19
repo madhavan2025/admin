@@ -140,7 +140,7 @@ export function Sidebar() {
         className="flex items-center gap-3"
       >
         {SubIcon && (
-          <SubIcon className="size-5 shrink-0" aria-hidden="true" />
+          <SubIcon className="size-6 shrink-0" aria-hidden="true" />
         )}
 
         <span>{subItem.title}</span>
