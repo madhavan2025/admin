@@ -141,8 +141,8 @@ if (editingId) {
   {saving
     ? "Saving..."
     : clients.length > 0
-    ? "Update Client"
-    : "Create Client"}
+    ? "Save"
+    : "Create"}
 </button>
 
       <hr className="border-stroke dark:border-dark-3" />

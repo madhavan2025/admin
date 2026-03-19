@@ -6,13 +6,9 @@ export const NAV_DATA = [
     items: [
       {
         title: "Dashboard",
+        url: "/",
         icon: Icons.HomeIcon,
-        items: [
-          {
-            title: "eCommerce",
-            url: "/",
-          },
-        ],
+        items: [],
       },
       
       {
@@ -30,22 +26,22 @@ export const NAV_DATA = [
       },
       
      
-      {
-        title: "Pages",
-        icon: Icons.SettingsIcon,
-        items: [
-          {
-            title: "Agent Settings",
-            url: "/agent-settings", 
-           
-          },
-          {
-            title: "Client Settings",
-            url: "/client-settings", 
-            
-          },
-        ],
-      },
+     {
+  title: "Settings",
+  icon: Icons.SettingsIcon,
+  items: [
+    {
+      title: "Agent Settings",
+      url: "/agent-settings",
+      icon: Icons.AgentIcon, 
+    },
+    {
+      title: "Client Settings",
+      url: "/client-settings",
+      icon: Icons.ClientIcon, 
+    },
+  ],
+}
     ],
   },
   
