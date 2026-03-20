@@ -20,7 +20,7 @@ export const NAV_DATA = [
 
       {
         title: "Logs",
-        url: "/logs",
+        url: "/",
         icon: Icons.LogsIcon,
         items: [],
       },
