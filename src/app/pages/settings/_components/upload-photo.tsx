@@ -29,7 +29,7 @@ export function UploadPhotoForm() {
   setUsername(parsed.name);
 
   // 👇 Fetch avatar from DB
-  fetch(`/api/get-avatar?userId=${userId}`)
+  fetch(`/api/get-avatar?userId=${parsed.id}`)
     .then(res => res.json())
     .then(data => {
       if (data.avatarUrl) {
