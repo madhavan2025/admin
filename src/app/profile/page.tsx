@@ -102,9 +102,7 @@ useEffect(() => {
                 accept="image/png, image/jpg, image/jpeg"
               />
 
-      
-  <CameraIcon />
-  <span>Edit</span>
+
 
             </label>
           </div>
