@@ -2,16 +2,18 @@
 
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Image from "next/image";
+import Link from "next/link";
 
 import { useState,useEffect } from "react";
 import { CameraIcon } from "./_components/icons";
-import { SocialAccounts } from "./_components/social-accounts";
+//import { SocialAccounts } from "./_components/social-accounts";
 
 export default function Page() {
   const [data, setData] = useState({
     name: "",
     profilePhoto: "",
     coverPhoto: "/images/cover/cover-02.jpg",
+      aboutMe: "",
   });
 const [userId, setUserId] = useState<string | null>(null);
 
@@ -41,7 +43,16 @@ useEffect(() => {
       }
     })
     .catch((err) => console.error("Avatar fetch error:", err));
-}, []);
+    fetch(`/api/profile?userId=${parsed.id}`)
+      .then((res) => res.json())
+      .then((profileData) => {
+        if (profileData.bio) {
+          setData((prev) => ({ ...prev, aboutMe: profileData.bio }));
+        }
+      })
+      .catch((err) => console.error("Profile fetch error:", err));
+  }, []);
+
 
  const handleChange = (e: any) => {
   const { name, files, value } = e.target;
@@ -91,9 +102,13 @@ useEffect(() => {
                 accept="image/png, image/jpg, image/jpeg"
               />
 
-              <CameraIcon />
-
-              <span>Edit</span>
+              <Link
+  href="/pages/settings"
+  className="flex items-center justify-center gap-2 rounded-lg bg-primary px-[15px] py-[5px] text-body-sm font-medium text-white hover:bg-opacity-90"
+>
+  <CameraIcon />
+  <span>Edit</span>
+</Link>
             </label>
           </div>
         </div>
@@ -160,15 +175,11 @@ useEffect(() => {
                 About Me
               </h4>
               <p className="mt-4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque posuere fermentum urna, eu condimentum mauris
-                tempus ut. Donec fermentum blandit aliquet. Etiam dictum dapibus
-                ultricies. Sed vel aliquet libero. Nunc a augue fermentum,
-                pharetra ligula sed, aliquam lacus.
+                {data.aboutMe || "No information provided yet."} {/* ✅ dynamic content */}
               </p>
             </div>
 
-            <SocialAccounts />
+      {/* <SocialAccounts /> */}/
           </div>
         </div>
       </div>

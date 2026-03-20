@@ -25,23 +25,12 @@ export const NAV_DATA = [
         items: [],
       },
       
-     
-     {
-  title: "Settings",
-  icon: Icons.SettingsIcon,
-  items: [
-    {
-      title: "Agent Settings",
-      url: "/agent-settings",
-      icon: Icons.AgentIcon, 
-    },
-    {
-      title: "Client Settings",
-      url: "/client-settings",
-      icon: Icons.ClientIcon, 
-    },
-  ],
-}
+      {
+        title: "Settings",
+        url: "/settings", // ✅ add this
+        icon: Icons.SettingsIcon,
+        items: [], // ✅ remove submenu
+      },
     ],
   },
   
