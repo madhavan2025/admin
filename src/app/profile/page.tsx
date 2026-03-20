@@ -102,13 +102,10 @@ useEffect(() => {
                 accept="image/png, image/jpg, image/jpeg"
               />
 
-              <Link
-  href="/pages/settings"
-  className="flex items-center justify-center gap-2 rounded-lg bg-primary px-[15px] py-[5px] text-body-sm font-medium text-white hover:bg-opacity-90"
->
+      
   <CameraIcon />
   <span>Edit</span>
-</Link>
+
             </label>
           </div>
         </div>
@@ -129,7 +126,13 @@ useEffect(() => {
                     htmlFor="profilePhoto"
                     className="absolute bottom-0 right-0 flex size-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
                   >
-                    <CameraIcon />
+                     <Link
+  href="/pages/settings"
+  className="flex items-center justify-center gap-2 rounded-lg bg-primary px-[15px] py-[5px] text-body-sm font-medium text-white hover:bg-opacity-90"
+>
+  <CameraIcon />
+  <span>Edit</span>
+</Link>
 
                     <input
                       type="file"
