@@ -37,7 +37,7 @@ export async function GET(req: Request) {
 
     // 2️⃣ Fallback to default config
     if (!agent) {
-      agent = await Agent.findOne({ userId: { $exists: false } });
+      agent = await Agent.findOne({ name: "default" });
     }
 
     return NextResponse.json(agent);
