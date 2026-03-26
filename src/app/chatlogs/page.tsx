@@ -10,15 +10,13 @@ export const metadata: Metadata = {
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { customerId?: string };
+  searchParams?: { customerId?: string }; // note optional
 }) {
-  // ✅ Remove the 'await' here
   const customerId = searchParams?.customerId ?? null;
 
   return (
     <>
       <Breadcrumb pageName="Chat Logs" />
-
       <div className="space-y-7.5 rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card md:p-6 xl:p-9">
         <div className="w-full">
           <ChatLogs customerId={customerId} />
