@@ -18,11 +18,10 @@ type ChatRow = {
   answer: string;
 };
 
-type Props = {
-  customerId: string | null;
-};
 
-const ChatLogs: React.FC<Props> = () => {
+
+const ChatLogs: React.FC= () => {
+   
   const [chatData, setChatData] = useState<ChatRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -51,7 +50,7 @@ const ChatLogs: React.FC<Props> = () => {
     if (customerId) {
       fetchChats();
     }
-  }, [customerId]);
+  }, []);
 
   // Filter data based on date and search term
   const filteredData = chatData.filter((row) => {

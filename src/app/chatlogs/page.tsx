@@ -7,20 +7,13 @@ export const metadata: Metadata = {
   description: "View chat history of your users",
 };
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams?: { customerId?: string };
-}) {
-  const customerId = searchParams?.customerId ?? null;
-
+export default function Page() {
   return (
     <>
       <Breadcrumb pageName="Chat Logs" />
-
       <div className="space-y-7.5 rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark dark:shadow-card md:p-6 xl:p-9">
         <div className="w-full">
-          <ChatLogs customerId={customerId} />
+          <ChatLogs />
         </div>
       </div>
     </>
