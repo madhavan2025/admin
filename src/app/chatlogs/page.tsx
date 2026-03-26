@@ -12,7 +12,8 @@ export default async function Page({
 }: {
   searchParams: { customerId?: string };
 }) {
-  const customerId = (await searchParams)?.customerId ?? null;
+  // ✅ Remove the 'await' here
+  const customerId = searchParams?.customerId ?? null;
 
   return (
     <>
@@ -23,8 +24,6 @@ export default async function Page({
           <ChatLogs customerId={customerId} />
         </div>
       </div>
-
-      
     </>
   );
 }
