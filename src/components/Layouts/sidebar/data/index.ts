@@ -19,11 +19,13 @@ export const NAV_DATA = [
       },
 
       {
-        title: "Logs",
-        url: "/",
+        title: "ChatLogs",
+        url: "/chatlogs",
         icon: Icons.LogsIcon,
         items: [],
       },
+
+      
       
       {
         title: "Settings",
