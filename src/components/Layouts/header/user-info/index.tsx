@@ -50,11 +50,13 @@ export function UserInfo() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsOpen(false);
-    router.push("/login"); // better than reload
-  };
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  setIsOpen(false);
+
+  router.push("/"); 
+  window.location.reload(); // 🔥 this reloads the page
+};
 
   const firstLetter = user?.name?.charAt(0)?.toUpperCase() || "?";
 
