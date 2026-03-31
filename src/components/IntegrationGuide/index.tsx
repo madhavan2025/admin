@@ -1,4 +1,72 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 export default function IntegrationGuide() {
+  const [loading, setLoading] = useState(true);
+  const [clients, setClients] = useState<any[]>([]); // fixed type
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const user =
+      typeof window !== "undefined"
+        ? JSON.parse(localStorage.getItem("user") || "{}")
+        : null;
+
+    setUserId(user?.id || null);
+  }, []);
+
+  const fetchClients = async () => {
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/client?userId=${userId}`);
+      const data = await res.json();
+
+      if (data?.data) {
+        setClients([data.data]); // keep array format
+      } else {
+        setClients([]);
+      }
+    } catch (err) {
+      console.error("Error fetching clients:", err);
+      setClients([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      fetchClients();
+    }
+  }, [userId]);
+
+  if (loading) {
+    return <div className="p-6 text-center">Checking...</div>;
+  }
+
+  // ✅ Correct condition
+if (clients.length === 0) {
+  return (
+    <div className="p-6 text-center text-gray-600">
+      No client found. Please{" "}
+      <span
+        className="text-primary underline cursor-pointer"
+        onClick={() => router.push("/client-settings")}
+      >
+        create a client
+      </span>{" "}
+      first.
+    </div>
+  );
+}
+
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-10">
 
