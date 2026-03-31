@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Alert } from "@/components/ui-elements/alert";
-
+import { useRouter } from "next/navigation";
 type Client = {
   clientId: string;
   clientName: string;
@@ -14,11 +14,12 @@ export default function ClientSettings() {
   const [clientName, setClientName] = useState("");
   const [clientUrl, setClientUrl] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(false);
 
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
-
+const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
 
 useEffect(() => {
@@ -44,6 +45,7 @@ useEffect(() => {
       // Pre-fill form
       setClientName(data.data.clientName);
       setClientUrl(data.data.clientUrl);
+      setShowInstructions(true);
     } else {
       setClients([]);
     }
@@ -83,6 +85,7 @@ if (editingId) {
     await fetchClients();
 
     setSaved(true);
+    setShowInstructions(true);
     setTimeout(() => setSaved(false), 3000);
   } catch (err) {
     console.error("Error saving client:", err);
@@ -146,7 +149,41 @@ if (editingId) {
 </button>
 
       <hr className="border-stroke dark:border-dark-3" />
+      {/* Instructions Section */}
+{showInstructions && (
+  <div className="rounded-xl border border-stroke p-5 dark:border-dark-3 bg-gray-50 dark:bg-dark-2 space-y-4">
 
+    <h3 className="text-lg font-bold">Chatbot Integration</h3>
+
+    {/* Script */}
+    <div>
+      <p className="text-sm font-semibold mb-2">Step 1: Add Script</p>
+      <div className="bg-black text-green-400 p-3 rounded-lg text-sm overflow-x-auto">
+        {`<script src="https://chatorder.vercel.app/chatbot.js"></script>`}
+      </div>
+    </div>
+
+    {/* Short Instructions */}
+    <div>
+      <p className="text-sm font-semibold mb-2">Step 2: How to Use</p>
+      <ul className="list-disc pl-5 text-sm space-y-1">
+        <li>Add this script before closing <code>{`</body>`}</code> tag</li>
+        <li>Works automatically after adding</li>
+        
+      </ul>
+    </div>
+
+    {/* View More Toggle */}
+   <button
+  onClick={() => router.push("/integration-guide")}
+  className="text-primary text-sm font-semibold underline"
+>
+  View More
+</button>
+
+    
+  </div>
+)}
 
       {/* Toast */}
       {saved && (
