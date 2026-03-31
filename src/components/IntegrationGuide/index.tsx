@@ -63,7 +63,7 @@ export default function IntegrationGuide() {
 
           <ol className="list-decimal pl-5 text-sm space-y-2">
             <li>Go to Plugins → Add New</li>
-            <li>Search for <b>"Code Snippets"</b></li>
+           <li>Search for <b>&quot;Code Snippets&quot;</b></li>
             <li>Install and activate the plugin</li>
             <li>Go to Snippets → Add New</li>
             <li>Paste the chatbot script</li>
