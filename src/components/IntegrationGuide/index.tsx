@@ -106,7 +106,7 @@ export default function IntegrationGuide() {
           </ol>
 
           <p className="text-xs text-gray-500">
-            Tip: Plugins like "Insert Headers and Footers" also make this easy.
+           Tip: Plugins like &quot;Insert Headers and Footers&quot; also make this easy.
           </p>
         </div>
       </div>
