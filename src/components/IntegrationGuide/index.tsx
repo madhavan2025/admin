@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ClipboardDocumentIcon, CheckIcon } from "@heroicons/react/20/solid";
 
 export default function IntegrationGuide() {
   const [loading, setLoading] = useState(true);
@@ -11,6 +12,19 @@ export default function IntegrationGuide() {
 const [sending, setSending] = useState(false);
 const [sent, setSent] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+const [copied, setCopied] = useState(false);
+
+const scriptCode = `<script src="https://chatorder.vercel.app/chatbot.js?id=client-d"></script>`;
+
+const handleCopy = async () => {
+  try {
+    await navigator.clipboard.writeText(scriptCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  } catch (err) {
+    console.error("Copy failed", err);
+  }
+};
 
   useEffect(() => {
     const user =
@@ -125,20 +139,37 @@ if (clients.length === 0) {
       </div>
 
       {/* STEP 1 */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-bold text-dark dark:text-white flex items-center gap-2">
-          <span className="bg-primary text-white text-xs px-2 py-1 rounded">1</span>
-          Copy the Script
-        </h2>
+   <div className="space-y-4">
+  <h2 className="text-lg font-bold text-dark dark:text-white flex items-center gap-2">
+    <span className="bg-primary text-white text-xs px-2 py-1 rounded">1</span>
+    Copy the Script
+  </h2>
 
-        <p className="text-sm text-body-color">
-         Copy the script below. This script loads the Digital Assistant on your website.
-        </p>
+  <p className="text-sm text-body-color">
+    Copy the script below. This script loads the Digital Assistant on your website.
+  </p>
 
-        <div className="bg-black text-green-400 p-4 rounded-lg text-sm overflow-x-auto">
-{`<script src="https://chatorder.vercel.app/chatbot.js"></script>`}
-        </div>
-      </div>
+  <div className="bg-black text-green-400 p-4 rounded-lg text-sm overflow-x-auto relative group">
+  
+  <pre>{scriptCode}</pre>
+
+  <button
+    onClick={handleCopy}
+    className="absolute top-2 right-2 bg-white text-black px-2 py-1 rounded text-xs flex items-center gap-1 cursor-pointer hover:bg-gray-200 opacity-0 group-hover:opacity-100 transition"
+  >
+    {copied ? (
+      <>
+        <CheckIcon className="w-4 h-4" /> Copied
+      </>
+    ) : (
+      <>
+        <ClipboardDocumentIcon className="w-4 h-4" /> Copy
+      </>
+    )}
+  </button>
+
+</div>
+</div>
 
       {/* STEP 2 */}
       <div className="space-y-4">
@@ -240,7 +271,7 @@ export default function Layout() {
   return (
     <>
       <Script 
-        src="https://chatorder.vercel.app/chatbot.js"
+        src="https://chatorder.vercel.app/chatbot.js?id=client-d"
         strategy="afterInteractive"
       />
     </>

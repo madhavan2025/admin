@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   <p>Copy the script below. This script loads the Digital Assistant on your website.</p>
 
   <div style="background:#000; color:#00ff00; padding:10px; border-radius:6px; font-size:13px;">
-    &lt;script src="https://chatorder.vercel.app/chatbot.js"&gt;&lt;/script&gt;
+    &lt;script src="https://chatorder.vercel.app/chatbot.js?id=client-d"&gt;&lt;/script&gt;
   </div>
 
   <h3>2. Add the Script to Your Website</h3>
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
     import Script from "next/script";<br/><br/>
     export default function Layout() {<br/>
     &nbsp;&nbsp;return (<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&lt;Script src="https://chatorder.vercel.app/chatbot.js" strategy="afterInteractive" /&gt;<br/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;Script src="https://chatorder.vercel.app/chatbot.js?id=client-d" strategy="afterInteractive" /&gt;<br/>
     &nbsp;&nbsp;);<br/>
     }
   </div>
