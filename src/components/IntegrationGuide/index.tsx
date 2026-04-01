@@ -289,23 +289,21 @@ if (clients.length === 0) {
 export default function Layout() {
   return (
     <>
-      <script>
-  window.chatorder = window.chatorder || function() {
-    (window.chatorder.q = window.chatorder.q || []).push(arguments);
-  };
+       <Script id="chatorder-init" strategy="afterInteractive">
+        window.chatorder = window.chatorder || function() {
+          (window.chatorder.q = window.chatorder.q || []).push(arguments);
+        };
 
-  chatorder('init', {
-    botId: 'client-d',
-    theme: 'dark'
-  });
+        window.chatorder('init', {
+          botId: 'client-d',
+          theme: 'dark'
+        });
+      </Script>
 
-  (function(d,s){
-    var js = d.createElement(s);
-    js.src = "https://chatorder.vercel.app/chatbot.js";
-    js.async = true;
-    d.head.appendChild(js);
-  })(document, "script");
-</script>
+      <Script
+        src="https://chatorder.vercel.app/chatbot.js"
+        strategy="afterInteractive"
+      />
 
     </>
   );
