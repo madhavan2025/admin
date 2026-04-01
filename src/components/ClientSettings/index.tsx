@@ -153,11 +153,11 @@ if (editingId) {
 {showInstructions && (
   <div className="rounded-xl border border-stroke p-5 dark:border-dark-3 bg-gray-50 dark:bg-dark-2 space-y-4">
 
-    <h3 className="text-lg font-bold">Chatbot Integration</h3>
+   <h3 className="text-lg font-bold text-dark dark:text-white">Digital Assistant Integration</h3>
 
     {/* Script */}
     <div>
-      <p className="text-sm font-semibold mb-2">Step 1: Add Script</p>
+      <p className="text-sm  text-dark dark:text-white mb-2">Step 1: Add Digital Assistant Script</p>
       <div className="bg-black text-green-400 p-3 rounded-lg text-sm overflow-x-auto">
         {`<script src="https://chatorder.vercel.app/chatbot.js"></script>`}
       </div>
@@ -165,7 +165,7 @@ if (editingId) {
 
     {/* Short Instructions */}
     <div>
-      <p className="text-sm font-semibold mb-2">Step 2: How to Use</p>
+      <p className="text-sm  text-dark dark:text-white mb-2">Step 2: How to Use</p>
       <ul className="list-disc pl-5 text-sm space-y-1">
         <li>Add this script before closing <code>{`</body>`}</code> tag</li>
         <li>Works automatically after adding</li>
