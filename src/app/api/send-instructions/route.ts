@@ -24,9 +24,25 @@ export async function POST(req: Request) {
   <h3>1. Copy the Script</h3>
   <p>Copy the script below. This script loads the Digital Assistant on your website.</p>
 
-  <div style="background:#000; color:#00ff00; padding:10px; border-radius:6px; font-size:13px;">
-    &lt;script src="https://chatorder.vercel.app/chatbot.js?id=client-d"&gt;&lt;/script&gt;
-  </div>
+  <div style="background:#000; color:#00ff00; padding:10px; border-radius:6px; font-size:13px; white-space:pre-line;">
+&lt;script&gt;
+  window.chatorder = window.chatorder || function() {
+    (window.chatorder.q = window.chatorder.q || []).push(arguments);
+  };
+
+  chatorder('init', {
+    botId: 'client-d',
+    theme: 'dark'
+  });
+
+  (function(d,s){
+    var js = d.createElement(s);
+    js.src = "https://chatorder.vercel.app/chatbot.js";
+    js.async = true;
+    d.head.appendChild(js);
+  })(document, "script");
+&lt;/script&gt;
+</div>
 
   <h3>2. Add the Script to Your Website</h3>
   <p>Paste the script just before the closing &lt;/body&gt; tag of your website.</p>
@@ -91,14 +107,33 @@ export async function POST(req: Request) {
 
   <p> Use the Next.js Script component to properly load the Digital Assistant:</p>
 
-  <div style="background:#000; color:#00ff00; padding:10px; border-radius:6px; font-size:13px;">
-    import Script from "next/script";<br/><br/>
-    export default function Layout() {<br/>
-    &nbsp;&nbsp;return (<br/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&lt;Script src="https://chatorder.vercel.app/chatbot.js?id=client-d" strategy="afterInteractive" /&gt;<br/>
-    &nbsp;&nbsp;);<br/>
-    }
-  </div>
+ <div style="background:#000; color:#00ff00; padding:10px; border-radius:6px; font-size:13px; white-space:pre-wrap; font-family:monospace;">
+import Script from "next/script";
+
+export default function Layout() {
+  return (
+    &lt;&gt;
+
+      &lt;Script id="chatorder-init" strategy="afterInteractive"&gt;
+        window.chatorder = window.chatorder || function() {
+          (window.chatorder.q = window.chatorder.q || []).push(arguments);
+        };
+
+        window.chatorder('init', {
+          botId: 'client-d',
+          theme: 'dark'
+        });
+      &lt;/Script&gt;
+
+      &lt;Script
+        src="https://chatorder.vercel.app/chatbot.js"
+        strategy="afterInteractive"
+      /&gt;
+
+    &lt;/&gt;
+  );
+}
+</div>
 
   <ol>
     <li>Open layout.tsx or _app.tsx</li>

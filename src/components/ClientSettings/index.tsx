@@ -25,7 +25,26 @@ const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
 const [copied, setCopied] = useState(false);
 
-const scriptCode = `<script src="https://chatorder.vercel.app/chatbot.js?id=client-d"></script>`;
+const scriptCode = `<script>
+  window.chatorder = window.chatorder || function() {
+    (window.chatorder.q = window.chatorder.q || []).push(arguments);
+  };
+
+  chatorder('init', {
+    botId: 'client-d',
+    theme: 'dark'
+  });
+
+  (function(d,s){
+    var js = d.createElement(s);
+    js.src = "https://chatorder.vercel.app/chatbot.js";
+    js.async = true;
+    d.head.appendChild(js);
+  })(document, "script");
+</script>
+
+
+`;
 
 const handleCopy = async () => {
   try {
