@@ -152,7 +152,7 @@ useEffect(() => {
           onChange={handleChange}
         />
 
-        <div className="flex justify-end gap-3">
+        <div className="flex  gap-3">
           <button
             type="submit"
             className="rounded-lg bg-primary px-6 py-[7px] font-medium text-gray-2 hover:bg-opacity-90"
