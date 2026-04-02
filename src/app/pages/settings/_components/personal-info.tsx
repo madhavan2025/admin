@@ -219,12 +219,20 @@ export function PersonalInfoForm() {
 
       {/* ✅ SUCCESS ALERT */}
       {saved && (
-        <div className="fixed bottom-5 right-5 z-50 animate-bounce">
+       <div
+    className="
+      fixed z-50 animate-bounce
+      inset-0 flex items-center justify-center   // centers on all sides
+      sm:bottom-5 sm:right-5 sm:inset-auto sm:flex-none  // moves to bottom-right on larger screens
+    "
+  >
+    <div className="w-full max-w-sm">  
           <Alert
             variant="success"
             title="Profile Saved"
             description="Your profile has been updated successfully."
           />
+          </div>
         </div>
       )}
     </ShowcaseSection>

@@ -163,15 +163,23 @@ export function UploadPhotoForm() {
       </form>
 
       {/* ✅ SUCCESS ALERT */}
-      {saved && message && (
-        <div className="fixed bottom-5 right-5 z-50 animate-bounce">
-          <Alert
-            variant="success"
-            title="Success"
-            description={message}
-          />
-        </div>
-      )}
+     {saved && message && (
+      <div
+    className="
+      fixed z-50 animate-bounce
+      inset-0 flex items-center justify-center   // centers on all sides
+      sm:bottom-5 sm:right-5 sm:inset-auto sm:flex-none  // moves to bottom-right on larger screens
+    "
+  >
+    <div className="w-full max-w-sm">  
+    <Alert
+      variant="success"
+      title="Success"
+      description={message}
+    />
+    </div>
+  </div>
+)}
     </ShowcaseSection>
   );
 }
