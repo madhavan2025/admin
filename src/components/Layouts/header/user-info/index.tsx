@@ -122,7 +122,7 @@ export function UserInfo() {
               {user?.name || "Guest"}
             </div>
 
-            <div className="leading-none text-gray-6">
+            <div className="leading-none text-gray-6 text-sm">
               {user?.email || "No email"}
             </div>
           </figcaption>
