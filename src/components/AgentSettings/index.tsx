@@ -109,18 +109,18 @@ useEffect(() => {
         <label className="text-sm font-semibold text-dark dark:text-white">Agent Icon</label>
         <div className="flex items-center gap-4">
           <input
-            type="text"
-            value={agentIcon}
-            onChange={(e) => setAgentIcon(e.target.value)}
-            placeholder="Icon URL"
-            className="flex-1 rounded-lg border border-stroke bg-transparent px-4 py-2.5 outline-none focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white"
-          />
+  type="text"
+  value={agentIcon}
+  onChange={(e) => setAgentIcon(e.target.value)}
+  placeholder="Icon URL"
+  className="w-full sm:w-auto sm:flex-1 rounded-lg border border-stroke bg-transparent px-4 py-2.5 outline-none focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white"
+/>
          <div className="h-12 w-12 flex-shrink-0">
   {agentIcon ? (
     <img
       src={agentIcon}
       alt="Preview"
-      className="h-full w-full rounded-full object-cover"
+      className="h-full w-full  object-cover"
     />
   ) : (
     <div className="h-full w-full rounded-full bg-gray-200 dark:bg-dark-2" />

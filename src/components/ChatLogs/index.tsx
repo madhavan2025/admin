@@ -81,33 +81,33 @@ const ChatLogs: React.FC= () => {
     <div className="mt-8">
       {/* Filters Row */}
       <div className="mb-4 flex flex-col sm:flex-row justify-between gap-4">
-        <div className="flex gap-2 w-full sm:w-auto">
-          {/* Date Filter */}
-          <div>
-            <label className="text-sm block mb-1">Filter by Date:</label>
-            <DatePicker
-  selected={selectedDate}
-  onChange={(date: Date | null) => setSelectedDate(date)}
-  dateFormat="yyyy-MM-dd"
-  placeholderText="Select a date"
-  className="border px-3 py-2 rounded w-full sm:w-auto"
-/>
-          </div>
+       <div className="flex gap-2 w-full sm:w-auto items-end">
+  {/* Date Filter */}
+  <div className="flex-1 sm:flex-none">
+    <label className="text-sm block mb-1">Filter by Date:</label>
+    <DatePicker
+      selected={selectedDate}
+      onChange={(date: Date | null) => setSelectedDate(date)}
+      dateFormat="yyyy-MM-dd"
+      placeholderText="Select a date"
+      className="border px-2 py-2 rounded w-full sm:w-auto text-sm"
+    />
+  </div>
 
-          {/* Reset Filter */}
-          <div className="self-end">
-            <button
-              onClick={() => {
-                setSelectedDate(null);
-                setSearchTerm("");
-                setCurrentPage(1);
-              }}
-              className="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded hover:bg-gray-200 transition-all text-sm"
-            >
-              Reset Filters
-            </button>
-          </div>
-        </div>
+  {/* Reset Filter */}
+  <div className="flex-shrink-0">
+    <button
+      onClick={() => {
+        setSelectedDate(null);
+        setSearchTerm("");
+        setCurrentPage(1);
+      }}
+      className="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded hover:bg-gray-200 transition-all text-sm whitespace-nowrap w-full sm:w-auto"
+    >
+      Reset Filters
+    </button>
+  </div>
+</div>
 
         {/* Search Filter */}
         <div className="w-full sm:w-1/3">

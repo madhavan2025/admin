@@ -4,13 +4,18 @@ import { UploadIcon } from "@/assets/icons";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Alert } from "@/components/ui-elements/alert"; // ✅ import Alert
 
 export function UploadPhotoForm() {
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
   const [username, setUsername] = useState<string>("");
 
-  // ✅ Get userId and username from localStorage
+  // ✅ NEW STATE for success alert
+  const [saved, setSaved] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // Get userId and username from localStorage
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -20,27 +25,21 @@ export function UploadPhotoForm() {
     }
   }, []);
 
+  // Fetch avatar from DB
   useEffect(() => {
-  const user = localStorage.getItem("user");
-  if (!user) return;
+    if (!userId) return;
 
-  const parsed = JSON.parse(user);
-  setUserId(parsed.id);
-  setUsername(parsed.name);
+    fetch(`/api/get-avatar?userId=${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.avatarUrl) {
+          setAvatarUrl(data.avatarUrl);
+        }
+      });
+  }, [userId]);
 
-  // 👇 Fetch avatar from DB
-  fetch(`/api/get-avatar?userId=${parsed.id}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.avatarUrl) {
-        setAvatarUrl(data.avatarUrl);
-      }
-    });
-}, []);
-  // ✅ UPLOAD / EDIT IMAGE
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  // UPLOAD / EDIT IMAGE
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !userId) return;
 
@@ -48,37 +47,52 @@ export function UploadPhotoForm() {
     formData.append("file", file);
     formData.append("userId", userId);
 
-    const res = await fetch("/api/upload-avatar", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const res = await fetch("/api/upload-avatar", {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      setAvatarUrl(data.imageUrl);
-    } else {
-      alert("Upload failed");
+      if (res.ok) {
+        setAvatarUrl(data.imageUrl);
+        setMessage("Profile image uploaded successfully!"); // ✅ success message
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      } else {
+        alert(data.error || "Upload failed");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong during upload");
     }
   };
 
-  // ✅ DELETE IMAGE
+  // DELETE IMAGE
   const handleDelete = async () => {
     if (!userId || !avatarUrl) return;
 
-    const res = await fetch("/api/upload-avatar", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, avatarUrl }),
-    });
+    try {
+      const res = await fetch("/api/upload-avatar", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, avatarUrl }),
+      });
 
-    if (res.ok) {
-      setAvatarUrl("");
-    } else {
-      alert("Delete failed");
+      if (res.ok) {
+        setAvatarUrl("");
+        setMessage("Profile image deleted successfully!"); // ✅ success message
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      } else {
+        alert("Delete failed");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong during delete");
     }
   };
-
 
   return (
     <ShowcaseSection title={avatarUrl ? "Your Photo" : "Upload your photo"} className="!p-7">
@@ -147,6 +161,17 @@ export function UploadPhotoForm() {
           </label>
         </div>
       </form>
+
+      {/* ✅ SUCCESS ALERT */}
+      {saved && message && (
+        <div className="fixed bottom-5 right-5 z-50 animate-bounce">
+          <Alert
+            variant="success"
+            title="Success"
+            description={message}
+          />
+        </div>
+      )}
     </ShowcaseSection>
   );
 }
