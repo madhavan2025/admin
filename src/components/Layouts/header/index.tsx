@@ -14,50 +14,59 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-stroke bg-white px-4 py-5 shadow-1 dark:border-stroke-dark dark:bg-gray-dark md:px-5 2xl:px-10">
-      <button
-  onClick={toggleSidebar}
-  className="shrink-0 rounded-lg border px-2 py-2 dark:border-stroke-dark dark:bg-[#020D1A]"
->
-        <MenuIcon />
-        <span className="sr-only">Toggle Sidebar</span>
-      </button>
+      
+      {/* Main Wrapper: 
+          Using 'gap-3' as the base for mobile to keep Hamburger, Search, and Icons 
+          perfectly aligned with the same spacing.
+      */}
+      <div className="flex w-full items-center justify-between gap-3 md:gap-4">
+        
+        {/* LEFT: Hamburger & optional Logo */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleSidebar}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border dark:border-stroke-dark dark:bg-[#020D1A] hover:dark:bg-[#FFFFFF1A] lg:hidden"
+          >
+            <MenuIcon />
+            <span className="sr-only">Toggle Sidebar</span>
+          </button>
 
-      {isMobile && (
-        <Link href={"/"} className="ml-2 max-[430px]:hidden min-[375px]:ml-4">
-          <Image
-            src={"/images/logo/logo-icon.svg"}
-            width={32}
-            height={32}
-            alt=""
-            role="presentation"
-          />
-        </Link>
-      )}
-
-      <div className="max-xl:hidden">
-        <h1 className="mb-0.5 text-heading-5 font-bold text-dark dark:text-white">
-          Dashboard
-        </h1>
-        <p className="font-medium">Next.js Admin Dashboard Solution</p>
-      </div>
-
-      <div className="flex flex-1 items-center justify-end gap-1 min-w-0">
-        <div className=" ml-2 sm:ml-4 relative w-full max-w-[300px] sm:max-w-[200px]">
-          <input
-            type="search"
-            placeholder="Search"
-            className="flex w-full items-center gap-3.5 rounded-full border bg-gray-2 py-3 pl-[53px] pr-5 outline-none transition-colors focus-visible:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-dark-4 dark:hover:bg-dark-3 dark:hover:text-dark-6 dark:focus-visible:border-primary"
-          />
-
-          <SearchIcon className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 max-[1015px]:size-5" />
+          {/* Logo hidden on very small screens to save space for the search bar */}
+          {isMobile && (
+            <Link href={"/"} className="shrink-0 hidden sm:block lg:hidden">
+              <Image
+                src={"/images/logo/logo-icon.svg"}
+                width={32}
+                height={32}
+                alt="Logo"
+              />
+            </Link>
+          )}
+          
+          <div className="hidden xl:block">
+            <h1 className="text-heading-5 font-bold text-dark dark:text-white">Dashboard</h1>
+          </div>
         </div>
 
-        <ThemeToggleSwitch />
+        {/* RIGHT: Search + Toggles + User */}
+        <div className="flex flex-1 items-center justify-end gap-3 md:gap-4">
+          
+          {/* Search Bar - flex-1 allows it to take available space on mobile */}
+          <div className="relative max-w-[300px] flex-1 sm:flex-initial sm:w-[250px] md:w-[300px]">
+            <input
+              type="search"
+              placeholder="Search"
+              className="h-11 w-full rounded-full border bg-gray-2 py-3 pl-10 pr-2 outline-none transition-all focus-visible:border-primary dark:border-dark-3 dark:bg-dark-2 sm:pl-[53px] sm:pr-5 max-sm:placeholder-transparent"
+            />
+            <SearchIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-5 sm:left-5" />
+          </div>
 
-        <Notification />
-
-        <div className="shrink-0">
-          <UserInfo />
+          {/* Action Icons */}
+          <div className="flex shrink-0 items-center gap-3 md:gap-4">
+            <ThemeToggleSwitch />
+            <Notification />
+            <UserInfo />
+          </div>
         </div>
       </div>
     </header>
