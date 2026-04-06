@@ -15,9 +15,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-stroke bg-white px-4 py-5 shadow-1 dark:border-stroke-dark dark:bg-gray-dark md:px-5 2xl:px-10">
       <button
-        onClick={toggleSidebar}
-        className="rounded-lg border px-1.5 py-1 dark:border-stroke-dark dark:bg-[#020D1A] hover:dark:bg-[#FFFFFF1A] lg:hidden"
-      >
+  onClick={toggleSidebar}
+  className="shrink-0 rounded-lg border px-2 py-2 dark:border-stroke-dark dark:bg-[#020D1A]"
+>
         <MenuIcon />
         <span className="sr-only">Toggle Sidebar</span>
       </button>
@@ -41,8 +41,8 @@ export function Header() {
         <p className="font-medium">Next.js Admin Dashboard Solution</p>
       </div>
 
-      <div className="flex flex-1 items-center justify-end gap-2 min-[375px]:gap-4">
-        <div className="relative w-full max-w-[300px]">
+      <div className="flex flex-1 items-center justify-end gap-1 min-w-0">
+        <div className=" ml-2 sm:ml-4 relative w-full max-w-[300px] sm:max-w-[200px]">
           <input
             type="search"
             placeholder="Search"
