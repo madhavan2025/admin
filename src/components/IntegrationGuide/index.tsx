@@ -128,6 +128,21 @@ if (clients.length === 0) {
           body: JSON.stringify({ email }),
         });
 
+         if (userId) {
+      await fetch("/api/notifications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          title: "Instructions Sent",
+          message: `Integration guide sent to ${email}`,
+          role: "admin",
+        }),
+      });
+    }
+
         setSent(true);
         setEmail("");
         setTimeout(() => setSent(false), 3000);

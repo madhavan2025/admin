@@ -13,11 +13,16 @@ export default function AgentSettings() {
   const [enableShopping, setEnableShopping] = useState(false);
   const [theme, setTheme] = useState({});
   const [saved, setSaved] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
    const [saving, setSaving] = useState(false); // new state
-  // Get user from localStorage
-const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user") || "{}") : null;
-const userId = user?.id;
+   
+   useEffect(() => {
+  if (typeof window !== "undefined") {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    setUserId(user?.id || null);
+  }
+}, []);
 
   // Fetch agent settings
 useEffect(() => {
@@ -77,9 +82,20 @@ useEffect(() => {
       },
       body: JSON.stringify(payload),
     });
-
+     const data = await response.json();
     if (!response.ok) throw new Error("Failed to save settings");
-
+    if (userId) {
+      await fetch("/api/notifications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          title: "Agent Settings Updated",
+          message: `${agentName || "Agent"} updated`,
+          role: "admin",
+        }),
+      });
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   } catch (error) {

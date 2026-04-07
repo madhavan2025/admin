@@ -17,26 +17,33 @@ export function UploadPhotoForm() {
 
   // Get userId and username from localStorage
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const parsed = JSON.parse(user);
-      setUserId(parsed.id);
-      setUsername(parsed.name); // assuming "name" is stored
-    }
-  }, []);
+  if (typeof window !== "undefined") {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+    setUserId(user?.id?.toString() || "");   // ensure string
+    setUsername(user?.name || "");
+  }
+}, []);
 
   // Fetch avatar from DB
   useEffect(() => {
-    if (!userId) return;
+  if (!userId) return;
 
-    fetch(`/api/get-avatar?userId=${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.avatarUrl) {
-          setAvatarUrl(data.avatarUrl);
-        }
-      });
-  }, [userId]);
+  const fetchAvatar = async () => {
+    try {
+      const res = await fetch(`/api/get-avatar?userId=${userId}`);
+      const data = await res.json();
+
+      if (data?.avatarUrl) {
+        setAvatarUrl(data.avatarUrl);
+      }
+    } catch (error) {
+      console.error("Error fetching avatar:", error);
+    }
+  };
+
+  fetchAvatar();
+}, [userId]);
 
   // UPLOAD / EDIT IMAGE
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +63,20 @@ export function UploadPhotoForm() {
       const data = await res.json();
 
       if (res.ok) {
+        if (userId) {
+    await fetch("/api/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        title: "Profile Image Updated",
+        message: "Your profile image has been uploaded successfully",
+        role: "user",
+      }),
+    });
+  }
         setAvatarUrl(data.imageUrl);
         setMessage("Profile image uploaded successfully!"); // ✅ success message
         setSaved(true);
@@ -81,6 +102,20 @@ export function UploadPhotoForm() {
       });
 
       if (res.ok) {
+          if (userId) {
+    await fetch("/api/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        title: "Profile Image Removed",
+        message: "Your profile image has been removed",
+        role: "user",
+      }),
+    });
+  }
         setAvatarUrl("");
         setMessage("Profile image deleted successfully!"); // ✅ success message
         setSaved(true);

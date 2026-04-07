@@ -115,6 +115,21 @@ if (editingId) {
       body: JSON.stringify(payload),
     });
 
+    await fetch("/api/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        title: editingId ? "Client Updated" : "Client Created",
+        message: editingId
+          ? `${clientName} details updated successfully`
+          : `${clientName} created successfully`,
+        role: "admin", // since dashboard admin
+      }),
+    });
+
     await fetchClients();
 
     setSaved(true);

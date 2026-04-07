@@ -22,6 +22,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "*.public.blob.vercel-storage.com", // ✅ THIS is required
       },
+     {
+        protocol: "https",
+        hostname: "i.pravatar.cc",
+      },
     ],
   },
   qualities: [75, 100],

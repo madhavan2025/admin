@@ -129,6 +129,20 @@ export function PersonalInfoForm() {
       const data = await res.json();
 
       if (res.ok) {
+        if (userId) {
+    await fetch("/api/notifications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+        title: "Profile Updated",
+        message: "Your profile has been updated successfully",
+        role: "user",
+      }),
+    });
+  }
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
       } else {
