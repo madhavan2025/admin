@@ -65,7 +65,7 @@ useEffect(() => {
   {/* Desktop Table */}
   <table className="w-full table-auto">
     <thead>
-      <tr className="bg-gray-100 text-left">
+      <tr className="bg-gray-100 dark:bg-dark-2 text-left">
         <th className="px-4 py-3 font-medium">User ID</th>
         <th className="px-4 py-3 font-medium">Notification</th>
         <th className="px-4 py-3 font-medium">Time</th>
@@ -110,7 +110,7 @@ useEffect(() => {
   {data.map((item) => (
     <div
       key={item._id}
-      className="border rounded-lg p-4 shadow-sm bg-white"
+      className="border rounded-lg p-4 shadow-sm bg-gray-100 dark:bg-dark-2"
     >
       <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-medium text-gray-500">
