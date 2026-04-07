@@ -32,7 +32,7 @@ useEffect(() => {
   if (!userId) return;
 
   fetch(`/api/notifications?userId=${userId}`)
-    .then((res) => res.json())
+    .then((res) => res.json()) 
     .then((json) => setData(Array.isArray(json) ? json : []))
     .catch((err) =>
       console.error("Error fetching notifications:", err)
@@ -53,7 +53,7 @@ useEffect(() => {
 }, [userId]);
 
   return (
-    <div className="p-6">
+    <div className="px-2 py-4 sm:px-4 md:px-6">
       <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-dark-3 dark:bg-gray-dark">
         <div className="px-6 py-4 border-b border-stroke dark:border-dark-3">
           <h4 className="text-xl font-bold text-dark dark:text-white">
@@ -61,48 +61,63 @@ useEffect(() => {
           </h4>
         </div>
 
-        <div className="max-w-full overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead>
-  <tr className="bg-gray-2 text-left dark:bg-dark-2">
-    <th className="px-4 py-4 font-medium">User ID</th>
-    <th className="px-4 py-4 font-medium">Notification</th>
-    <th className="px-4 py-4 font-medium">Time</th>
-    <th className="px-4 py-4 font-medium">Status</th>
-  </tr>
-</thead>
-            <tbody>
+        <div className="hidden md:block max-w-full overflow-x-auto">
+  {/* Desktop Table */}
+  <table className="w-full table-auto">
+    <thead>
+      <tr className="bg-gray-100 text-left">
+        <th className="px-4 py-3 font-medium">User ID</th>
+        <th className="px-4 py-3 font-medium">Notification</th>
+        <th className="px-4 py-3 font-medium">Time</th>
+        <th className="px-4 py-3 font-medium">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {data.map((item) => (
+        <tr key={item._id} className="border-b">
+          <td className="px-4 py-4 text-sm">{item.userId}</td>
+
+          <td className="px-4 py-4">
+            <p className="font-semibold">{item.title}</p>
+            <p className="text-sm text-gray-500 break-words">
+              {item.message}
+            </p>
+          </td>
+
+          <td className="px-4 py-4 text-sm whitespace-nowrap">
+            {new Date(item.createdAt).toLocaleString()}
+          </td>
+
+          <td className="px-4 py-4">
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-medium ${
+                item.status === "unseen"
+                  ? "bg-red-100 text-red-600"
+                  : "bg-green-100 text-green-600"
+              }`}
+            >
+              {item.status}
+            </span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+{/* Mobile Card Layout */}
+<div className="md:hidden space-y-4">
   {data.map((item) => (
-    <tr
+    <div
       key={item._id}
-      className="border-b border-stroke dark:border-dark-3"
+      className="border rounded-lg p-4 shadow-sm bg-white"
     >
-      {/* UserId */}
-      <td className="px-4 py-5 text-sm font-medium">
-        {item.userId}
-      </td>
-
-      {/* Message */}
-      <td className="px-4 py-5">
-        <p className="text-sm font-bold text-dark dark:text-white">
-          {item.title}
-        </p>
-        <p className="text-xs text-gray-500">
-          {item.message}
-        </p>
-      </td>
-
-      {/* Time */}
-      <td className="px-4 py-5 text-sm">
-        {item.createdAt
-          ? new Date(item.createdAt).toLocaleString()
-          : "N/A"}
-      </td>
-
-      {/* Status */}
-      <td className="px-4 py-5">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-sm font-medium text-gray-500">
+          User: {item.userId}
+        </span>
         <span
-          className={`rounded-full px-3 py-1 text-xs font-medium ${
+          className={`rounded-full px-2 py-1 text-xs font-medium ${
             item.status === "unseen"
               ? "bg-red-100 text-red-600"
               : "bg-green-100 text-green-600"
@@ -110,20 +125,25 @@ useEffect(() => {
         >
           {item.status}
         </span>
-      </td>
-    </tr>
+      </div>
+
+      <p className="font-semibold">{item.title}</p>
+      <p className="text-sm text-gray-500 break-words">
+        {item.message}
+      </p>
+
+      <p className="text-xs text-gray-400 mt-2">
+        {new Date(item.createdAt).toLocaleString()}
+      </p>
+    </div>
   ))}
 
   {data.length === 0 && (
-    <tr>
-      <td colSpan={4} className="py-10 text-center text-gray-500">
-        No activity found.
-      </td>
-    </tr>
+    <p className="text-center text-gray-500 py-6">
+      No notifications found.
+    </p>
   )}
-</tbody>
-          </table>
-        </div>
+</div>
       </div>
     </div>
   );

@@ -53,9 +53,13 @@ const fetchNotifications = async () => {
 
 // ✅ Fetch when userId ready
 useEffect(() => {
-  if (userId) {
+  if (!userId) return;
+
+  const interval = setInterval(() => {
     fetchNotifications();
-  }
+  }, 1000); // every 5 seconds
+
+  return () => clearInterval(interval);
 }, [userId]);
 
 // ✅ Refetch when dropdown opens (real feel)
@@ -84,7 +88,7 @@ useEffect(() => {
 
       <DropdownContent 
   align={isMobile ? "end" : "center"} 
-  className="min-w-[18rem] p-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 shadow-lg rounded-xl"
+  className="min-w-[16rem] p-3 bg-white dark:bg-dark-2 border border-stroke dark:border-dark-3 shadow-lg rounded-xl"
 >
         <div className="mb-2 flex items-center justify-between">
           <span className="font-medium">Notifications</span>
