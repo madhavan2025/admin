@@ -17,7 +17,8 @@ export default function ClientSettings() {
   const [clientUrl, setClientUrl] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showInstructions, setShowInstructions] = useState(false);
-
+  const [domains, setDomains] = useState<string[]>([]);
+const [newDomain, setNewDomain] = useState("");
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -78,6 +79,7 @@ useEffect(() => {
       // Pre-fill form
       setClientName(data.data.clientName);
       setClientUrl(data.data.clientUrl);
+      setDomains(data.data.allowedDomains || []);
       setShowInstructions(true);
     } else {
       setClients([]);
@@ -95,6 +97,25 @@ useEffect(() => {
   }
 }, [userId]);
   // Save / Update
+
+  const handleAddDomain = () => {
+  if (!newDomain.trim()) return;
+
+  const clean = newDomain
+    .replace(/^https?:\/\//, "")
+    .replace(/\/$/, "")
+    .toLowerCase();
+
+  if (domains.includes(clean)) return;
+
+  setDomains([...domains, clean]);
+  setNewDomain("");
+};
+
+const handleRemoveDomain = (domain: string) => {
+  setDomains(domains.filter((d) => d !== domain));
+};
+
 const handleSave = async () => {
     setSaving(true);
   try {
@@ -102,6 +123,7 @@ const handleSave = async () => {
   clientName,
   clientUrl,
   userId,
+   allowedDomains: domains,
 };
 
 if (editingId) {
@@ -180,6 +202,75 @@ if (editingId) {
           className="w-full rounded-lg border border-stroke bg-transparent px-4 py-2.5 outline-none focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white"
         />
       </div>
+
+      {/* Allowed Domains */}
+     <div className="flex flex-col gap-3">
+  <label className="text-sm font-semibold text-dark dark:text-white">
+    Allowed Domains (CORS)
+  </label>
+
+  {/* Input + Add */}
+  <div className="flex gap-2">
+    <input
+      type="text"
+      value={newDomain}
+      onChange={(e) => setNewDomain(e.target.value)}
+      placeholder="example.com"
+      className="flex-1 rounded-lg border border-stroke px-4 py-2 outline-none focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white"
+    />
+    <button
+      onClick={handleAddDomain}
+      className="bg-primary text-white px-4 rounded-lg font-semibold hover:bg-opacity-90 transition"
+    >
+      Add
+    </button>
+  </div>
+
+  {/* Domain List */}
+  <div className="flex flex-wrap gap-2">
+    {domains.length === 0 && (
+      <span className="text-sm text-gray-400">
+        No domains added yet
+      </span>
+    )}
+
+    {domains.map((domain, index) => (
+      <div
+        key={index}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-full 
+        bg-blue-50 text-blue-700 
+        dark:bg-dark-3 dark:text-white 
+        border border-blue-100 dark:border-dark-4
+        shadow-sm hover:shadow transition"
+      >
+        {/* Domain */}
+        <span className="font-medium">{domain}</span>
+
+        {/* Remove button */}
+        <button
+          onClick={() => handleRemoveDomain(domain)}
+          className="ml-1 flex items-center justify-center 
+          w-5 h-5 rounded-full 
+          text-red-500 hover:bg-red-100 hover:text-red-600 
+          dark:hover:bg-red-900/30 
+          transition"
+          title="Remove domain"
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+
+  {/* Helper text */}
+  <p className="text-xs text-gray-500">
+    Only these domains can use your chatbot script.
+  </p>
+
+  <p className="text-xs text-amber-500">
+    Domains will be saved only after clicking the Save button.
+  </p>
+</div>
 
       {/* Save Button */}
       <button

@@ -2,8 +2,26 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mangoose";
 import Client from "@/models/Client";
 
+// ✅ Helper: Extract origin safely
+const getOrigin = (req: Request) => {
+  return req.headers.get("origin") || "";
+};
 
-// ✅ GET all clients
+// ✅ Helper: Domain validation
+const isDomainAllowed = (origin: string, client: any) => {
+  if (!origin || !client?.allowedDomains?.length) return false;
+
+  return client.allowedDomains.some((domain: string) => {
+    if (client?.cors?.allowSubdomains) {
+      return origin.endsWith(domain);
+    }
+    return origin.includes(domain);
+  });
+};
+
+
+
+// ✅ GET client
 export async function GET(req: Request) {
   await connectToDatabase();
 
@@ -18,9 +36,10 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     success: true,
-    data: client || null, // 🔥 return null if not found
+    data: client || null,
   });
 }
+
 
 
 // ✅ POST new client
@@ -28,7 +47,7 @@ export async function POST(req: Request) {
   await connectToDatabase();
 
   const body = await req.json();
-  const { userId } = body;
+  const { userId, allowedDomains = [] } = body;
 
   if (!userId) {
     return NextResponse.json({
@@ -46,23 +65,36 @@ export async function POST(req: Request) {
     });
   }
 
-  const client = await Client.create(body);
+  const client = await Client.create({
+    ...body,
+    allowedDomains, // ✅ save domains
+  });
 
   return NextResponse.json({ success: true, data: client });
 }
 
 
-// ✅ UPDATE client
-// ✅ UPDATE client (use clientId, NOT userId)
+
+// ✅ UPDATE client (with domains)
 export async function PUT(req: Request) {
   await connectToDatabase();
 
   const body = await req.json();
-  const { clientId, clientName, clientUrl } = body;
+
+  const {
+    clientId,
+    clientName,
+    clientUrl,
+    allowedDomains = [],
+  } = body;
 
   const updated = await Client.findOneAndUpdate(
-    { clientId }, // 🔥 use clientId here
-    { clientName, clientUrl },
+    { clientId },
+    {
+      clientName,
+      clientUrl,
+      allowedDomains, // ✅ update domains
+    },
     { new: true }
   );
 

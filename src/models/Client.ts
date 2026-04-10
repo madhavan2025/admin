@@ -6,20 +6,37 @@ const ClientSchema = new Schema(
     clientId: {
       type: String,
       unique: true,
-     default: () => uuidv4()
+      default: () => uuidv4(),
     },
+
     userId: {
       type: String,
       required: true,
       unique: true, // one client per user
     },
+
     clientName: {
       type: String,
       required: true,
     },
+
     clientUrl: {
       type: String,
       required: true,
+    },
+
+    // ✅ NEW: Allowed Domains (Whitelist)
+    allowedDomains: {
+      type: [String],
+      default: [],
+    },
+
+    // ✅ OPTIONAL: CORS Settings (future-proof)
+    cors: {
+      allowSubdomains: {
+        type: Boolean,
+        default: false,
+      },
     },
   },
   { timestamps: true }
